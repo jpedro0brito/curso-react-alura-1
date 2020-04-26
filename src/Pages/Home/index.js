@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import Table from './Table';
-import Form from './Form';
-import Header from './Header';
-import PopUp from './PopUp';
-import ApiService from './ApiService';
+import Table from '../../Components/Table';
+import Form from '../../Components/Form';
+import Header from '../../Components/Header';
+import PopUp from '../../utils/PopUp';
+import ApiService from '../../utils/ApiService';
 
-class App extends Component {
+class Home extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -61,4 +61,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Home;

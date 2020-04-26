@@ -1,16 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-
-import App from './App';
-import Sobre from './Sobre';
-import Livros from './Livros';
-import Autores from './Autores';
-import NotFound from './NotFound';
-
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-
 import * as serviceWorker from './serviceWorker';
+
+import App from './Pages/Home';
+import Sobre from './Pages/Sobre';
+import Livros from './Pages/Livros';
+import Autores from './Pages/Autores';
+import NotFound from './Pages/NotFound';
+
+import './index.css';
 import 'materialize-css/dist/css/materialize.min.css';
 
 ReactDOM.render(
