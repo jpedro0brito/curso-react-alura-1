@@ -9,6 +9,9 @@ const PopUp = {
             case 'error':
                 M.toast({html: msg, classes: 'red', displayLength: 2000});
             break;
+            default:
+                M.toast({html: msg, classes: 'red', displayLength: 2000});
+            break;
         }
     }
 }
