@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import Table from './Table';
 import Form from './Form';
 import Header from './Header';
-import 'materialize-css/dist/css/materialize.min.css';
+import PopUp from './PopUp';
 
 class App extends Component {
 
@@ -44,10 +44,13 @@ class App extends Component {
         autores: autores.filter((autor, posAtual) => index !== posAtual),
       }
     );
+
+    PopUp.exibeMensagem('error', 'Item removido');
   };
 
   escutadorDeSubmit = autor => {
     this.setState({ autores: [...this.state.autores, autor] });
+    PopUp.exibeMensagem('success', 'Item adicionando')
   };
 
   render() {

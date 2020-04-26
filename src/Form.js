@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import FormValidator from './FormValidator';
+import PopUp from './PopUp';
 
 class Form extends Component {
     constructor(props) {
@@ -57,7 +58,7 @@ class Form extends Component {
             const {nome, livro, preco} = validacao;
             [nome, livro, preco]
                 .filter(elem => elem.isInvalid)
-                .forEach(console.log);
+                .forEach(campo => PopUp.exibeMensagem('error', campo.message));
         }
     }
 
