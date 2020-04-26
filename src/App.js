@@ -14,24 +14,36 @@ class App extends Component {
 
   }
   removeAutor = id => {
-    const { autores } = this.state;
-    this.setState({
-        autores: autores.filter((autor) => autor.id !== id),});
+    const autoresAtualizando = this.state.autores.filter((autor) => autor.id !== id);
     ApiService.RemoveAutor(id)
-      .then(res => PopUp.exibeMensagem('error', 'Item removido'));
+      .then(res => {
+        if(res.message === 'deleted'){
+          this.setState({ autores: [...autoresAtualizando] });
+          PopUp.exibeMensagem('error', 'Item removido');
+        }
+      })
+      .catch(err => PopUp.exibeMensagem('error', 'Erro na comunicação com a API ao tentar remover o autor'));
   };
 
   escutadorDeSubmit = autor => {
     ApiService.CriaAutor(JSON.stringify(autor))
-      .then(resAutor => {
-        this.setState({ autores: [...this.state.autores, resAutor.data] });
-        PopUp.exibeMensagem('success', 'Item adicionando')
+      .then(res => {
+        if(res.message === 'success'){
+          this.setState({ autores: [...this.state.autores, res.data] });
+          PopUp.exibeMensagem('success', 'Item adicionando')
+        }
       })
+      .catch(err => PopUp.exibeMensagem('error', "Erro na comunicação com a API ao tentar criar o autor"));
   };
 
   componentDidMount(){
     ApiService.ListaAutores()
-    .then(res => this.setState({ autores: [...this.state.autores, ...res.data] }));
+    .then(res => {
+      if(res.message === 'success'){
+        this.setState({ autores: [...this.state.autores, ...res.data] });
+      }
+    })
+    .catch(err => PopUp.exibeMensagem('error', "Erro na comunicação com a API ao tentar listar os autores"));
   }
 
   render() {
