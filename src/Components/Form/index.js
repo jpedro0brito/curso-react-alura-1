@@ -1,125 +1,145 @@
 import React, { Component } from 'react';
 import FormValidator from '../../utils/FormValidator';
-import PopUp from '../../utils/PopUp';
+import Toast from '../Toast/Toast.jsx'
 
-class Form extends Component {
+class Formulario extends Component {
     constructor(props) {
-        super(props);
+        super(props)
 
-        this.Validador = new FormValidator([
+        this.validador = new FormValidator([
             {
-                campoValidar :'nome',
-                metodo : 'isEmpty',
-                validoQuando : false,
-                mensagem : 'Entre com um nome'
+                campo: 'nome',
+                metodo: 'isEmpty',
+                validoQuando: false,
+                mensagem: 'Entre com um nome'
             },
             {
-                campoValidar :'livro',
-                metodo : 'isEmpty',
-                validoQuando : false,
-                mensagem : 'Entre com um livro'
+                campo: 'livro',
+                metodo: 'isEmpty',
+                validoQuando: false,
+                mensagem: 'Entre com um livro'
             },
             {
-                campoValidar :'preco',
-                metodo : 'isInt',
-                args : [{min:1, max:99999}],
-                validoQuando : true,
-                mensagem : 'Entre com um valor numerico'
-
-            },
-        ]);
+                campo: 'preco',
+                metodo: 'isInt',
+                args: [{ min: 0, max: 99999 }],
+                validoQuando: true,
+                mensagem: 'Entre com um valor numérico'
+            }
+        ])
 
         this.stateInicial = {
             nome: '',
             livro: '',
             preco: '',
-            validacao: this.Validador.validor()
+            validacao: this.validador.valido(),
+            mensagem: {
+                open: false,
+                texto: '',
+                tipo: ''
+            }
         }
 
-        this.state = this.stateInicial;
+        this.state = this.stateInicial
     }
 
     escutadorDeInput = event => {
-        const { name, value } = event.target;
+        const { name, value } = event.target
 
-        this.setState(
-            {
-                [name]: value
-            }
-        );
+        this.setState({
+            [name]: value
+        })
     }
 
-    submitForm = () => {
-        const validacao = this.Validador.validar(this.state);
-        if(validacao.isValid){
-            this.props.escutadorDeSubmit(this.state);
-            this.setState(this.stateInicial);
-        }else{
-            const {nome, livro, preco} = validacao;
-            [nome, livro, preco]
-                .filter(elem => elem.isInvalid)
-                .forEach(campo => PopUp.exibeMensagem('error', campo.message));
+    submitFormulario = () => {
+        const validacao = this.validador.valida(this.state)
+
+        if (validacao.isValid) {
+            this.props.escutadorDeSubmit(this.state)
+            this.setState(this.stateInicial)
+        } else {
+            const { nome, livro, preco } = validacao
+            const campos = [nome, livro, preco]
+            const camposInvalidos = campos.filter(elem => {
+                return elem.isInvalid
+            })
+            const erros = camposInvalidos.reduce(
+                (erros, campo) => erros + campo.mensagem + '. ',
+                ''
+            )
+
+            this.setState({
+                mensagem: {
+                    mensagem: erros,
+                    tipo: 'error',
+                    open: true
+                }
+            })
         }
     }
 
     render() {
-        const { nome, livro, preco } = this.state;
+        const { nome, livro, preco } = this.state
 
         return (
-            <form>
-                <div className="row">
-                    <div className="input-field col s4">
-                        <input
-                            className='validate'
-                            id="nome"
-                            type="text"
-                            name="nome"
-                            value={nome}
-                            onChange={this.escutadorDeInput}
-                        />
-                        <label
-                            htmlFor="nome"
-                        >Nome
-                        </label>
-                    </div>
-                    <div className="input-field col s4">
-                        <label
-                            htmlFor="livro"
-                        >Livro
-                        </label>
-                        <input
-                            className='validate'
-                            id="livro"
-                            type="text"
-                            name="livro"
-                            value={livro}
-                            onChange={this.escutadorDeInput}
-                        />
-                    </div>
-                    <div className="input-field col s4">
-                        <label
-                            htmlFor="preco"
-                        >Preço
-                        </label>
-                        <input
-                            className='validate'
-                            id="preco"
-                            type="text"
-                            name="preco"
-                            value={preco}
-                            onChange={this.escutadorDeInput}
-                        />
-                    </div>
-                </div>
-                <button
-                    className='waves-effect waves-light indigo lighten-2 btn'
-                    type="button"
-                    onClick={this.submitForm}
-                > Salvar
-                </button>
-            </form>
-        );
+            <>
+                <Toast
+                    open={this.state.mensagem.open}
+                    handleClose={() =>
+                        this.setState({ mensagem: { open: false } })
+                    }
+                    severity={this.state.mensagem.tipo}
+                >
+                    {this.state.mensagem.mensagem}
+                </Toast>
+                <form>
+                    <Grid container spacing={2} alignItems='center'>
+                        <Grid item>
+                            <TextField
+                                id='nome'
+                                label='Nome'
+                                name='nome'
+                                variant='outlined'
+                                value={nome}
+                                onChange={this.escutadorDeInput}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <TextField
+                                id='livro'
+                                label='Livro'
+                                name='livro'
+                                variant='outlined'
+                                value={livro}
+                                onChange={this.escutadorDeInput}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <TextField
+                                id='preco'
+                                label='Preço'
+                                name='preco'
+                                variant='outlined'
+                                value={preco}
+                                onChange={this.escutadorDeInput}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <Button
+                                variant='contained'
+                                color='primary'
+                                onClick={this.submitFormulario}
+                                type='button'
+                            >
+                                Salvar
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </form>
+            </>
+        )
     }
 }
+export default Formulario
 
 export default Form;

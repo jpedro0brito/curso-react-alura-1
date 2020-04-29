@@ -9,7 +9,6 @@ import Autores from './Pages/Autores';
 import NotFound from './Pages/NotFound';
 
 import './index.css';
-import 'materialize-css/dist/css/materialize.min.css';
 
 ReactDOM.render(
   <BrowserRouter>

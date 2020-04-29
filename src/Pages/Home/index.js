@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import Table from '../../Components/Table';
+import Tabela from '../../Components/Table';
 import Form from '../../Components/Form';
 import Header from '../../Components/Header';
 import PopUp from '../../utils/PopUp';
@@ -47,18 +47,27 @@ class Home extends Component {
   }
 
   render() {
+    const campos = [
+        { titulo: 'Autores', dado: 'nome' },
+        { titulo: 'Livros', dado: 'livro' },
+        { titulo: 'Preços', dado: 'preco' }
+    ]
 
     return (
-      <Fragment>
-        <Header />
-        <div className='container'>
-          <h1>Casa do codigo</h1>
-          <Table autores={this.state.autores} removeAutor={this.removeAutor} />
-          <Form escutadorDeSubmit={this.escutadorDeSubmit} />
-        </div>
-      </Fragment>
-    );
-  }
+        <Fragment>
+            <Header />
+            <div className='container mb-10'>
+                <h1>Casa do Código</h1>
+                <Tabela
+                    campos={campos}
+                    dados={this.state.autores}
+                    removeDados={this.removeAutor}
+                />
+                <Form escutadorDeSubmit={this.escutadorDeSubmit} />
+            </div>
+        </Fragment>
+    )
+}
 }
 
 export default Home;
